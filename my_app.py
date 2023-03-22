@@ -24,30 +24,29 @@ def my_app(cfg: DictConfig) -> None:
         pass
     print(f"Output directory : {cfg.output_dir}")
     output_dir = Path(cfg.output_dir).resolve()
-    match cfg.benchmark:
-        case 'runtime':
-            import timeit
-            runtime = timeit.timeit(f"do_task({cfg.task})", number=1, globals=globals())
-            log.info(f"Process ID {os.getpid()} executed task {cfg.task} in {runtime} seconds")
-            runtime_file = output_dir / 'runtime.txt'
-            runtime_file.write_text(f'{cfg.sleep} {runtime}')
-        case 'memory':
-            import memray
-            memray_file = output_dir / 'memray.bin'
-            memory_file: Path = output_dir / 'memory.txt'
-            log.info('Starting memory tracking')
-            with memray.Tracker(
-                file_name=memray_file,
-                native_traces=True,
-                follow_fork=True,
-                memory_interval_ms=1,
-            ):
-                try:
-                    do_task(cfg.task)
-                except BaseException as e:
-                    print(e)  # Output: Command 'exit 1' returned non-zero exit status 1.
-        case _:
-            do_task(cfg.task)
+    if cfg.benchmark == 'runtime':
+        import timeit
+        runtime = timeit.timeit(f"do_task({cfg.task})", number=1, globals=globals())
+        log.info(f"Process ID {os.getpid()} executed task {cfg.task} in {runtime} seconds")
+        runtime_file = output_dir / 'runtime.txt'
+        runtime_file.write_text(f'{cfg.sleep} {runtime}')
+    elif cfg.benchmark == 'memory':
+        import memray
+        memray_file = output_dir / 'memray.bin'
+        memory_file: Path = output_dir / 'memory.txt'
+        log.info('Starting memory tracking')
+        with memray.Tracker(
+            file_name=memray_file,
+            native_traces=True,
+            follow_fork=True,
+            memory_interval_ms=1,
+        ):
+            try:
+                do_task(cfg.task)
+            except BaseException as e:
+                print(e)  # Output: Command 'exit 1' returned non-zero exit status 1.
+    else:
+        do_task(cfg.task)
 
 if __name__ == "__main__":
     my_app()
