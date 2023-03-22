@@ -1,0 +1,35 @@
+
+📏 Total allocations:
+	3
+
+📦 Total memory allocated:
+	2.281KB
+
+📊 Histogram of allocation size:
+	min: 534.000B
+	----------------------------------------
+	< 577.000B : 1 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
+	< 624.000B : 0 
+	< 676.000B : 1 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
+	< 731.000B : 0 
+	< 791.000B : 0 
+	< 855.000B : 0 
+	< 925.000B : 0 
+	< 1001.000B: 0 
+	< 1.058KB  : 0 
+	<=1.144KB  : 1 ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
+	----------------------------------------
+	max: 1.145KB
+
+📂 Allocator type distribution:
+	 MALLOC: 3
+
+🥇 Top 5 largest allocating locations (by size):
+	- my_app:/Users/benjaminr/Documents/GitHub/example_hydra_hpc/my_app.py:39 -> 1.145KB
+	- _validate_and_normalize_key:/opt/homebrew/Caskroom/mambaforge/base/envs/example_hydra_hpc/lib/python3.11/site-packages/omegaconf/dictconfig.py:275 -> 630.000B
+	- _is_missing_value:/opt/homebrew/Caskroom/mambaforge/base/envs/example_hydra_hpc/lib/python3.11/site-packages/omegaconf/_utils.py:509 -> 534.000B
+
+🥇 Top 5 largest allocating locations (by number of allocations):
+	- my_app:/Users/benjaminr/Documents/GitHub/example_hydra_hpc/my_app.py:39 -> 1
+	- _is_missing_value:/opt/homebrew/Caskroom/mambaforge/base/envs/example_hydra_hpc/lib/python3.11/site-packages/omegaconf/_utils.py:509 -> 1
+	- _validate_and_normalize_key:/opt/homebrew/Caskroom/mambaforge/base/envs/example_hydra_hpc/lib/python3.11/site-packages/omegaconf/dictconfig.py:275 -> 1
