@@ -12,11 +12,16 @@ Install conda and create a new environment:
 conda env update -f env.yaml --prune
 ```
 
+add .local/bin to your PATH
+```bash
+export PATH=$PATH:$HOME/.local/bin
+```
+
 ## HPC setup
 
 Depending on the infrastructure and cluster, you maybe need to change some modules
 ```
-module swap cluster/slaking
+module swap cluster/donphan
 source modules.sh
 ```
 
