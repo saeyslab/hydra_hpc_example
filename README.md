@@ -1,8 +1,7 @@
 # Hydra Slurm example
 
-This is an example of how to use Hydra to launch jobs locally and on a Slurm cluster. For more background, read https://hydra.cc/docs/plugins/submitit_launcher/. This is an extended example of https://github.com/facebookresearch/hydra/tree/main/plugins/hydra_submitit_launcher/example.
+This is a collection of examples of how to use Hydra to launch jobs locally and on a Slurm cluster. For more background, read [the Hydra documentation](https://hydra.cc/docs).
 
-The application in `my_app.py` is a Python script that prints the process and task ID. The task is sleeping for a number of seconds, the amount of seconds is defined by the task id. The application is launched with Hydra, which reads in the config files in `configs/` and allows overriding various aspects of the execution.
 
 ## Local setup
 
@@ -29,12 +28,12 @@ You can always reset this setup using `module purge`.
 
 ## Examples
 
-- [src/sleep_hydra/README.md](`src/sleep_hydra/README.md`) is an example used to explain different launch options and benchmarking runtime and memory usage with `timeit` and `memray`.
-- [src/unique_hydra/README.md](`src/sleep_hydra/README.md`)
+- [src/sleep_hydra/README.md](./src/sleep_hydra/README.md) is an example used to explain different launch options and benchmarking runtime and memory usage with `timeit` and `memray`.
+- [src/unique_hydra/README.md](./src/sleep_hydra/README.md)
 
 ## Common patterns
 
-There are various usage patterns in Hydra to make your life easier. For more information, see the [Hydra documentation](https://hydra.cc/docs/patterns/configuring_experiments/).
+There are various usage patterns in Hydra to make your life easier. For more information, see the [Hydra documentation on common patterns](https://hydra.cc/docs/patterns/configuring_experiments/).
 
 ## Possible improvements
 
@@ -46,3 +45,7 @@ There are various usage patterns in Hydra to make your life easier. For more inf
 - Optuna sweeper
 - Usage with Dask
 - Usage with Prefect 
+
+## References
+
+- [hydra_submitit_launcher](https://github.com/facebookresearch/hydra/tree/main/plugins/hydra_submitit_launcher/example)

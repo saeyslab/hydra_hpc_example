@@ -11,10 +11,10 @@ python scripts/sleep_plots.py
 Note that the configuration `task.sleep=1,2,3 benchmark=runtime,memory` would require 6 tasks and fail on an interactive cluster with a 5 task queue limit.
 
 The runtime plot shows the 3 tasks with increasing sleep length.
-<img src="../resources/sleep_runtime.png">
+<img src="../../resources/sleep_runtime.png">
 
 The memory plot shows the 3 tasks with increasing memory usage.
-<img src="../resources/sleep_memory.png">
+<img src="../../resources/sleep_memory.png">
 
 ## Different launch options explained
 
