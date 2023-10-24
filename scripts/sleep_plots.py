@@ -2,12 +2,19 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 import subprocess
 import re
-import yaml
+from omegaconf import OmegaConf
 from typing import Any
+import logging
+import os
+
+# set log level based on env
+logging.basicConfig(level=os.environ.get('LOGLEVEL', logging.INFO))
 
 def parse_runtime(f: Path) -> tuple[int, float]:
-    x, y = f.read_text().split(' ')
-    return int(x), float(y)
+    text = f.read_text()
+    logging.info(text)
+    _, y = text.split(' ')
+    return float(y)
 
 def parse_memory(f: Path) -> float | None:
     memory_file = f.parent / 'memory.txt'
@@ -28,52 +35,56 @@ def parse_memory(f: Path) -> float | None:
             return float(n)
 
 def plot_runtime(files: list[Path]) -> list[Any]:
-    runtimes = [parse_runtime(f) for f in files]
-    print(runtimes)
+    runtimes = [(get_task(f)['runtime'], parse_runtime(f)) for f in files]
+    logging.info(runtimes)
     xs, ys = zip(*runtimes)
     return plt.plot(xs, ys, marker='o')
 
 
 def get_task(f) -> int:
     config_path = (f.parent / '.hydra' / 'config.yaml')
-    with open(config_path) as fh:
-        config = yaml.safe_load(fh)
-    return int(config['task'])
+    config = OmegaConf.load(config_path)
+    return config['task']
 
 def plot_memory(files) -> plt.Figure: 
-    memories = [(get_task(f), parse_memory(f)) for f in files]
-    print(memories)
+    memories = [(get_task(f)['memory'], parse_memory(f)) for f in files]
+    logging.info(memories)
     xs, ys = zip(*memories)
     return plt.plot(xs, ys, marker='o')
 
 def get_sorted_files(p) -> list[Path]:
     return sorted(p.glob('*'))
 
-def main(multirun, output) -> None:
-    if multirun is None:
-        multirun = get_sorted_files(get_sorted_files(Path('multirun'))[-1])[-1]
+def main(multirun, run_folder, output) -> None:
+    if multirun is None and run_folder is None:
+        multirun = Path('multirun')
+    if run_folder is None:
+        run_folder = get_sorted_files(get_sorted_files(multirun)[-1])[-1]
+    logging.info(multirun)
     if output is None:
-        output = multirun
-    print(output)
+        output = Path('resources')
+    logging.info(output)
 
-    runtime_files = list(multirun.glob('**/runtime.txt'))
+    runtime_files = list(run_folder.glob('**/runtime.txt'))
     if runtime_files:
         _ = plot_runtime(runtime_files)
         plt.title('Runtime (s)')
-        plt.savefig(output / 'runtime.png')
+        plt.savefig(output / 'sleep_runtime.png')
         plt.close()
 
-    memory_files = list(multirun.glob('**/memray.bin'))
+    memory_files = list(run_folder.glob('**/memray.bin'))
     if memory_files:
         _ = plot_memory(memory_files)
         plt.title('Memory (MB)')
-        plt.savefig(output / 'memory.png')
+        plt.savefig(output / 'sleep_memory.png')
         plt.close()
 
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--multirun", type=Path, help="Multirun output folder. Is most recent if not specified.")
-    parser.add_argument("--output", type=Path, help="Output location of the plots.")
+    parser.add_argument('-m', "--multirun", type=Path, default='multirun', help="Root locations of all multiruns of which to select the most recent run_folder.")
+    parser.add_argument('-r', "--run_folder", type=Path, default=None, help="Specific multirun output folder, instead of most recent.")    
+    parser.add_argument('-o', "--output", type=Path, default='resources', help="Output location of the plots.")
     args = parser.parse_args()
+    logging.info(args)
     main(**vars(args))
