@@ -62,13 +62,15 @@ def main(multirun, run_folder, output) -> None:
         run_folder = get_sorted_files(get_sorted_files(multirun)[-1])[-1]
     logging.info(multirun)
     if output is None:
-        output = Path('resources')
+        output = run_folder
     logging.info(output)
 
     runtime_files = list(run_folder.glob('**/runtime.txt'))
     if runtime_files:
         _ = plot_runtime(runtime_files)
         plt.title('Runtime (s)')
+        plt.xlabel('Expected')
+        plt.ylabel('Measured')
         plt.savefig(output / 'sleep_runtime.png')
         plt.close()
 
@@ -76,6 +78,8 @@ def main(multirun, run_folder, output) -> None:
     if memory_files:
         _ = plot_memory(memory_files)
         plt.title('Memory (MB)')
+        plt.xlabel('Expected')
+        plt.ylabel('Measured')
         plt.savefig(output / 'sleep_memory.png')
         plt.close()
 
@@ -84,7 +88,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-m', "--multirun", type=Path, default='multirun', help="Root locations of all multiruns of which to select the most recent run_folder.")
     parser.add_argument('-r', "--run_folder", type=Path, default=None, help="Specific multirun output folder, instead of most recent.")    
-    parser.add_argument('-o', "--output", type=Path, default='resources', help="Output location of the plots.")
+    parser.add_argument('-o', "--output", type=Path, help="Output location of the plots. Defaults to run_folder.")
     args = parser.parse_args()
     logging.info(args)
     main(**vars(args))
