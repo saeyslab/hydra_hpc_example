@@ -28,8 +28,9 @@ You can always reset this setup using `module purge`.
 
 ## Examples
 
-- [src/sleep_hydra/README.md](./src/sleep_hydra/README.md) is an example used to explain different launch options and benchmarking runtime and memory usage with `timeit` and `memray`.
-- [src/unique_hydra/README.md](./src/sleep_hydra/README.md)
+- [src/sleep_pbs/README.md](./src/sleep_pbs/README.md) is an example used to explain interactive and job-based scheduling with PBS and SLURM. The example sleep script is benchmarked for runtime and memory usage with `timeit` and `memray`.
+- [src/sleep_hydra/README.md](./src/sleep_hydra/README.md) is the same sleep example and benchmarking, but executed with the Hydra framework. More powerful and flexible, but also more complex.
+- [src/unique_hydra/README.md](./src/unique_hydra/README.md)
 
 ## Common patterns
 

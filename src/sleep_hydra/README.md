@@ -1,9 +1,13 @@
-# Sleep example
+# Sleep example with Hydra
 
 This example implements a task that sleeps for `{runtime}` seconds and holds a Numpy array of `{memory}` megabytes in size. The runtime can be measured with `timeit` and the memory usage with `memray`.
 
 Because the multirun output folder has a fixed structure, you can parse the folder with a script and plot the benchmarking metrics. This example script creates plots in the multirun folder when executing the script with a benchmark option.
 ```bash
+ml swap cluster/donphan
+# launch interactive session
+activate=src/sleep_hydra script=bash srun --pty runner.pbs
+# execute Hydra like normal
 python src/sleep_hydra/main.py +sweep='{runtime: 1, memory: 1},{runtime: 2, memory: 10},{runtime: 3, memory: 100}' task.runtime='${sweep.runtime}' task.memory='${sweep.memory}' benchmark=all hydra/launcher=joblib -m
 python scripts/sleep_plots.py
 ```

@@ -1,0 +1,11 @@
+# hydra
+hydra-core
+hydra-submitit-launcher
+hydra-joblib-launcher
+# benchmarking
+memray
+# plotting
+matplotlib
+# just to silence some warnings
+threadpoolctl
+pytz

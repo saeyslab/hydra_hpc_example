@@ -31,8 +31,9 @@ Note that activating the environment on the login node instead of the compute no
 ```bash
 # On default login node (doduo)
 ml swap cluster/donphan
-# can work on donphan login node if already installed
-PBS_O_WORKDIR=$PWD activate=src/sleep_pbs bash runner.pbs
+# Make sure all environment are deactivated
+# Note source instead of bash! can work on donphan login node if already installed
+PBS_O_WORKDIR=$PWD activate=src/sleep_pbs source runner.pbs
 # will fail on donphan login node
 PBS_O_WORKDIR=$PWD install=src/sleep_pbs bash runner.pbs
 # ++ python --version
@@ -80,7 +81,7 @@ The plots of the benchmarking results show that the measured runtime and memory 
 
 ## Using SLURM instead of PBS
 
-You can use the `runner.pbs` shell script to submit a job to the cluster with SLURM in the same way. You just have to replace `squb -I` with `srun` and `qsub` with `sbatch`. SLURM auto-sets the PBS_O_WORKDIR to the current directory from where you submit. PBS specific comments in the script will not work.
+You can use the `runner.pbs` shell script to submit a job to the cluster with SLURM in the same way. You just have to replace `qsub -I` with `srun` and `qsub` with `sbatch`. SLURM auto-sets the PBS_O_WORKDIR to the current directory from where you submit. PBS specific comments in the script will not work.
 
 Installation
 ```bash

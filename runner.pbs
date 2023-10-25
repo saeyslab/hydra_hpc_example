@@ -2,10 +2,10 @@
 #PBS -l walltime=0:10:00
 #PBS -l mem=5gb
 
+set -ex
+
 # In the comments above, we request 10 minutes of wallclock time and 5GB RAM.
 # This should be enough to debug, install environments and launch jobs.
-
-set -ex
 
 # Using -v, we can pass arguments that will be filled in in the variables in the
 # script. For example:
@@ -14,12 +14,12 @@ set -ex
 #
 # will make sure the variable $cluster contains the value "donphan" within the script.
 
-echo $PBS_O_WORKDIR
+# echo $PBS_O_WORKDIR
 
-if [ -d $PBS_O_WORKDIR ]; then
-	# navigate to the folder where the script is located
-	cd $PBS_O_WORKDIR
-fi
+# if [ -d $PBS_O_WORKDIR ]; then
+# 	# navigate to the folder where the script is located
+# 	cd $PBS_O_WORKDIR
+# fi
 
 echo "Working dir: $PWD"
 
@@ -71,13 +71,13 @@ elif [ ! -z $activate ]; then
 	VENV_NAME=venv_${NAME}_${cluster}
 	VENV_PATH="${ROOT_VENVS}/${VENV_NAME}/"
     # Load the modules
+	# cd $activate
 	source $activate/modules.sh
 	# Activate the virtual environment
 	source $VENV_PATH/bin/activate
 
 	if [ ! -z $script ]; then
 		# Navigate to the script folder
-		pushd $activate
 		# if script ends with .py, use python
 		if [[ $script == *.py ]]; then
 			script="python $script"

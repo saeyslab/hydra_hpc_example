@@ -1,0 +1,5 @@
+# @package _global_
+
+defaults:
+  - default
+  - override /hydra/launcher: joblib
