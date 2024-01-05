@@ -1,0 +1,13 @@
+_target_: dask_jobqueue.SLURMCluster
+queue: ${oc.env:SLURM_CLUSTERS}
+walltime: 00:10:00
+n_workers: 1
+cores: 1
+memory: 2 GB
+job_script_prologue: [
+  'source ${path_modules}/modules.sh',
+  'source ${path_venv}/bin/activate',
+  'which python'
+]
+python: python
+log_directory: ${output_dir}/slurm

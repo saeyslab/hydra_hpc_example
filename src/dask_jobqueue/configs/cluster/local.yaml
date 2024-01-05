@@ -1,0 +1,4 @@
+_target_: distributed.LocalCluster
+n_workers: 1
+threads_per_worker: 1
+memory_limit: 1 GB

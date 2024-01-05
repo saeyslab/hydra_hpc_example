@@ -1,0 +1,37 @@
+# @package _global_
+
+# specify here default configuration
+# order of defaults determines the order in which configs override each other
+defaults:
+    - _self_
+    - optional local@_global_: default
+    # optional since it doesn't need to exist and is excluded from version control
+    # - optional experiment@_global_: default
+    - cluster: local
+    - task: sleep
+    - optional launcher: default
+
+# path to original working directory the app was executed from
+# ${hydra:runtime.cwd}
+# Use current cwd path, because interpolation error otherwise at sweep dir https://github.com/facebookresearch/hydra/issues/2247
+# Alternative is to use pyrootutils as in https://github.com/ashleve/lightning-hydra-template
+work_dir: "./"
+root_venvs: ${oc.env:VSC_DATA}/venvs/
+path_venv: ${root_venvs}/venv_${name}_${oc.env:SLURM_CLUSTERS}
+path_modules: ${hydra:runtime.cwd}/src/${name}
+name: dask_jobqueue
+conda_env: ${name}
+
+# path to output directory, created dynamically by hydra
+# will be under the log_dir folder
+# path generation pattern is specified in `configs/hydra/default.yaml`
+# use it to store all files generated during the run, like ckpts and metrics
+output_dir: ${hydra:runtime.output_dir}
+
+benchmark: "runtime"
+# See https://omegaconf.readthedocs.io/en/latest/usage.html#variable-interpolation
+
+# hydra:
+#   searchpath:
+#     # relative path refers to original working directory the app was executed from by the user
+#     - file://configs
