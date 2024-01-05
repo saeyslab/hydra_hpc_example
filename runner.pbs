@@ -2,8 +2,6 @@
 #PBS -l walltime=0:10:00
 #PBS -l mem=5gb
 
-set -ex
-
 # In the comments above, we request 10 minutes of wallclock time and 5GB RAM.
 # This should be enough to debug, install environments and launch jobs.
 
@@ -32,8 +30,9 @@ fi
 # If the cluster argument is empty, throw an error
 if [ -z $cluster ]; then
 	# detect cluster from loaded cluster module
-	cluster=$(module list 2>&1 | grep -oP '(?<=cluster/)[^/ ]+')
-	echo "No cluster argument provided, detected cluster '$cluster' from loaded cluster module"
+	# cluster=$(module list 2>&1 | grep -oP '(?<=cluster/)[^/ ]+')
+	cluster=$SLURM_CLUSTERS
+	echo "No cluster argument provided, detected cluster '$cluster' from SLURM_CLUSTERS"
 fi
 if [[ -z $install && -z $activate ]]; then
 	echo "Provide a install or activate argument using -v, e.g.: qsub runner.pbs -v install=folder/with/requirements.txt_and_modules.sh" 1>&2
