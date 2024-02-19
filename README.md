@@ -31,7 +31,7 @@ You can always reset this setup using `module purge`.
 - [src/sleep_pbs/README.md](./src/sleep_pbs/README.md) is an example used to explain interactive and job-based scheduling with PBS and SLURM. The example sleep script is benchmarked for runtime and memory usage with `timeit` and `memray`.
 - [src/sleep_hydra/README.md](./src/sleep_hydra/README.md) is the same sleep example and benchmarking, but executed with the Hydra framework. More powerful and flexible, but also more complex.
 - [src/dask_jobqueue/README.md](./src/dask_jobqueue/README.md) is an example of how to use Hydra and submitit to launch a Dask jobqueue through the SLURM scheduler. 
-- [src/unique_hydra/README.md](./src/unique_hydra/README.md)
+- [src/frequencies_hydra/README.md](./src/frequencies_hydra/README.md) is the counting frequencies example with benchmarking. It uses a Python-only configuration, based on hydra-zen.
 
 ## Common patterns
 
@@ -39,13 +39,8 @@ There are various usage patterns in Hydra to make your life easier. For more inf
 
 ## Possible improvements
 
-- More complex tasks
-- Nicer plots
-- Hydra Structured configs instead of YAML files
 - Allow benchmarking using platform instrumentation and diagnostics ([Slurm](https://saeyslab.github.io/dambi-hpc-guide/advanced/benchmarking.html), [Dask](https://docs.dask.org/en/stable/diagnostics-local.html), Prefect...)
-- More complex Hydra config
 - Optuna sweeper
-- Usage with Dask
 - Usage with Prefect 
 
 ## References

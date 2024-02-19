@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["frequencies_hydra"]
+package-dir = {"" = "src"}
+
+[project]
+name = "frequencies_hydra"
+version = "0.1.0"
+description = "A minimal pyproject.toml file for frequencies_hydra project"
+dependencies = [
+    "hydra-zen",
+    "hydra-core",
+    "hydra-submitit-launcher",
+    "hydra-joblib-launcher",
+    "memray",
+    "seaborn",
+]

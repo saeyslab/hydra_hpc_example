@@ -2,3 +2,8 @@ outputs/
 multirun/
 outputs_complex/
 __pycache__/
+
+# ignore python and egg files
+*.pyc
+*.pyo
+*.egg-info/
