@@ -5,12 +5,16 @@
 # In the comments above, we request 10 minutes of wallclock time and 5GB RAM.
 # This should be enough to debug, install environments and launch jobs.
 
+# author: Benjamin Rombaut
+# contact: benjamin.rombaut[at]ugent.be
+# last update: 2024-02-18
+
 # Using -v, we can pass arguments that will be filled in in the variables in the
 # script. For example:
 #
-# $ qsub runner.pbs -v cluster=donphan
+# $ qsub runner.pbs -v CLUSTER=donphan
 #
-# will make sure the variable $cluster contains the value "donphan" within the script.
+# will make sure the variable $CLUSTER contains the value "donphan" within the script.
 
 # echo $PBS_O_WORKDIR
 
@@ -23,35 +27,43 @@ echo "Working dir: $PWD"
 
 # Navigate to the folder "venvs" in the VSC_DATA directory
 ROOT_VENVS=$VSC_DATA/venvs/
+# pip respects the TMPDIR environment variable
+# otherwise ~/.cache/pip will soon take all available VSC_HOME space
+# no TMPDIR is set by default, so we set it to a temporary
+export TMPDIR=${TMPDIR:-$VSC_DATA/tmp}
+
 if [ ! -d $ROOT_VENVS ]; then
 	mkdir $ROOT_VENVS
 fi
 
-# If the cluster argument is empty, throw an error
-if [ -z $cluster ]; then
+# If the CLUSTER argument is empty, throw an error
+if [ -z $CLUSTER ]; then
 	# detect cluster from loaded cluster module
-	# cluster=$(module list 2>&1 | grep -oP '(?<=cluster/)[^/ ]+')
-	cluster=$SLURM_CLUSTERS
-	echo "No cluster argument provided, detected cluster '$cluster' from SLURM_CLUSTERS"
+	CLUSTER=$(module list 2>&1 | grep -oP '(?<=cluster/)[^/ ]+')
+	# CLUSTER=$SLURM_CLUSTERS
+	echo "No CLUSTER argument provided, detected cluster '$CLUSTER'"
 fi
-if [[ -z $install && -z $activate ]]; then
-	echo "Provide a install or activate argument using -v, e.g.: qsub runner.pbs -v install=folder/with/requirements.txt_and_modules.sh" 1>&2
+if [[ -z $INSTALL && -z $ACTIVATE && -z $CONDA ]]; then
+	echo "Provide an INSTALL or ACTIVATE argument: INSTALL=folder/with/requirements.txt_and_modules.sh qsub runner.pbs" 1>&2
 	exit 1
 fi
+if [[ -z $PIP_ARGS ]]; then
+	PIP_ARGS="$INSTALL"
+fi
 
 
-if [ ! -z $install ]; then
+if [ ! -z $INSTALL ]; then
 	# install a new virtual environment
 
-	NAME=`basename $install`
+	NAME=`basename $(readlink -f $INSTALL)`
 
 	# This is the name of the virtual environment we will construct.
 	# The name depends on the chosen cluster.
-	VENV_NAME=venv_${NAME}_${cluster}
+	VENV_NAME=venv_${NAME}_${CLUSTER}
 	VENV_PATH="${ROOT_VENVS}/${VENV_NAME}/"
 
 	# Load the modules
-	source $install/modules.sh
+	source $INSTALL/modules.sh
 
     # Create the virtual environment and install packages
 	# If this virtual environment already exists, delete it.
@@ -60,31 +72,41 @@ if [ ! -z $install ]; then
 	fi
     python3 -m venv $VENV_PATH
     source $VENV_PATH/bin/activate
-    pip install -r $install/requirements.txt
+	if [ ! -z "$PIP_ARGS" ]; then
+        pip install $PIP_ARGS
+    fi
+	echo "Virtual environment $VENV_PATH installed."
 	# TODO: add `pip install -e .` for local packages
-elif [ ! -z $activate ]; then
-	NAME=`basename $activate`
+elif [ ! -z $ACTIVATE ]; then
+	NAME=`basename $(readlink -f $ACTIVATE)`
 
 	# This is the name of the virtual environment we will construct.
 	# The name depends on the chosen cluster.
-	VENV_NAME=venv_${NAME}_${cluster}
+	VENV_NAME=venv_${NAME}_${CLUSTER}
 	VENV_PATH="${ROOT_VENVS}/${VENV_NAME}/"
     # Load the modules
-	# cd $activate
-	source $activate/modules.sh
+	# cd $ACTIVATE
+	source $ACTIVATE/modules.sh
 	# Activate the virtual environment
-	source $VENV_PATH/bin/activate
-
-	if [ ! -z $script ]; then
-		# Navigate to the script folder
-		# if script ends with .py, use python
-		if [[ $script == *.py ]]; then
-			script="python $script"
-		elif [[ $script == *.sh ]]; then
-			# just use bash
-			script="bash $script"
-		fi
-		# Run the script (or an absolute script path) with the arguments
-		$script $args "$@"
-	fi
+	if  [ -f $VENV_PATH/bin/activate ]; then
+        source $VENV_PATH/bin/activate
+    fi
+	echo "Virtual environment $VENV_PATH activated."
+elif [ ! -z $CONDA ]; then
+	# activate a conda environment
+	source ~/.bashrc
+	conda activate $CONDA
+	echo "Virtual environment $CONDA activated."
+fi
+if [ ! -z "$SCRIPT" ]; then
+	# Navigate to the script folder
+	# if script ends with .py, use python
+	# if [[ "$SCRIPT" == *.py ]]; then
+	# 	SCRIPT="python $SCRIPT"
+	# elif [[ "$SCRIPT" == *.sh ]]; then
+	# 	# just use bash
+	# 	SCRIPT="bash $SCRIPT"
+	# fi
+	# Run the script (or an absolute script path) with the arguments
+	$SCRIPT
 fi

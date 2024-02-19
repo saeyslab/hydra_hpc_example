@@ -15,7 +15,7 @@ ml swap cluster/donphan
 qsub -I
 # On donphan compute node
 cd $PBS_O_WORKDIR
-install=src/sleep_pbs bash runner.pbs
+INSTALL=src/sleep_pbs bash runner.pbs
 # CTRL+D to logout from the compute node back to the login node
 ```
 
@@ -24,7 +24,7 @@ install=src/sleep_pbs bash runner.pbs
 ```bash
 ml swap cluster/donphan
 # Submit to queue, will be executed on donphan compute node
-qsub runner.pbs -v install=src/sleep_pbs 
+qsub runner.pbs -v INSTALL=src/sleep_pbs 
 ```
 
 Note that activating the environment on the login node instead of the compute node can work, but installing and running can result in an error when loading the Python interpreter e.g. `Illegal instruction`. The modules are created for the compute nodes, not the login nodes. 
@@ -33,9 +33,9 @@ Note that activating the environment on the login node instead of the compute no
 ml swap cluster/donphan
 # Make sure all environment are deactivated
 # Note source instead of bash! can work on donphan login node if already installed
-PBS_O_WORKDIR=$PWD activate=src/sleep_pbs source runner.pbs
+PBS_O_WORKDIR=$PWD ACTIVATE=src/sleep_pbs source runner.pbs
 # will fail on donphan login node
-PBS_O_WORKDIR=$PWD install=src/sleep_pbs bash runner.pbs
+PBS_O_WORKDIR=$PWD INSTALL=src/sleep_pbs bash runner.pbs
 # ++ python --version
 # Illegal instruction     (core dumped)
 ```
@@ -51,7 +51,7 @@ ml swap cluster/donphan
 qsub -I
 # On donphan compute node
 cd $PBS_O_WORKDIR
-activate=src/sleep_pbs script=main.py bash runner.pbs --runtime 1 --memory 1 --output_dir tmp_output
+ACTIVATE=src/sleep_pbs script=main.py bash runner.pbs --runtime 1 --memory 1 --output_dir tmp_output
 # CTRL+D to logout from the compute node back to the login node
 # benchmark results are in ./tmp_output/
 ```
@@ -61,7 +61,7 @@ activate=src/sleep_pbs script=main.py bash runner.pbs --runtime 1 --memory 1 --o
 ```bash
 ml swap cluster/donphan
 # Submit to queue, will be executed on donphan compute node and uses parameter shorthand
-qsub runner.pbs -v activate=src/sleep_pbs,script=main.py,args="-r 1 -m 1 -o tmp_output"
+qsub runner.pbs -v ACTIVATE=src/sleep_pbs,script=main.py,args="-r 1 -m 1 -o tmp_output"
 ```
 
 ## Multi-jobs
@@ -72,7 +72,7 @@ The format of the `tmp_sweep_output/` folder is similar to the `multirun/` folde
 ### Sweep with Python
 
 ```bash
-activate=src/sleep_pbs script=sweep.py bash runner.pbs -s sweep.csv -o tmp_sweep_output
+ACTIVATE=src/sleep_pbs script=sweep.py bash runner.pbs -s sweep.csv -o tmp_sweep_output
 ml load Python matplotlib
 python scripts/sleep_plots.py -r src/sleep_pbs/tmp_sweep_output
 ```
@@ -86,10 +86,10 @@ You can use the `runner.pbs` shell script to submit a job to the cluster with SL
 Installation
 ```bash
 ml swap cluster/donphan
-install=src/sleep_pbs srun runner.pbs
+INSTALL=src/sleep_pbs srun runner.pbs
 ```
 
 Run 
 ```bash
-activate=src/sleep_pbs script=main.py sbatch runner.pbs --help
+ACTIVATE=src/sleep_pbs script=main.py sbatch runner.pbs --help
 ```

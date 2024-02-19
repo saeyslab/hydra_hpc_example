@@ -16,13 +16,13 @@ pip install -r src/dask_jobqueue/requirements.txt
 (3) installing the modules environment for a specific HPC cluster
 ```bash
 ml swap cluster/donphan
-install=src/dask_jobqueue srun --pty runner.pbs
+INSTALL=src/dask_jobqueue srun --pty runner.pbs
 ```
 
 To test out the worker environment, start an interactive session on the HPC cluster
 ```bash
 qsub -I # not needed if using session via the Open OnDemand portal
-activate=src/dask_jobqueue source runner.pbs
+ACTIVATE=src/dask_jobqueue source runner.pbs
 cd $PBS_O_WORKDIR
 ```
 
@@ -69,7 +69,7 @@ After testing and debugging, large jobs can be launched using two methods, the r
 
 The runner script does not need a conda environment to launch and is most similar to PBS or SLURM scripts.
 ```
-activate=src/sleep_pbs script=src/dask_jobqueue/main.py sbatch runner.pbs --help
+ACTIVATE=src/sleep_pbs script=src/dask_jobqueue/main.py sbatch runner.pbs --help
 ```
 
 The Hydra Launcher plugin approach requires a conda environment to launch, but is more integrated with the Hydra CLI and other plugins. Note the need for the multirun flag `-m`. The options for `hydra/launcher` are built-in by installing the Launcher plugins, but `launcher=submitit_slurm` is a config located at `configs/launcher/submitit_slurm`. The output of multirun jobs are in the folder `multiruns`, not `outputs`.
@@ -91,7 +91,7 @@ Because the multirun output folder has a fixed structure, you can parse the fold
 ```bash
 ml swap cluster/donphan
 # launch interactive session
-# activate=src/dask_jobqueue script=bash srun --pty runner.pbs
+# ACTIVATE=src/dask_jobqueue script=bash srun --pty runner.pbs
 # execute the multi-run
 python src/dask_jobqueue/main.py +sweep='{runtime: 1, memory: 1},{runtime: 2, memory: 10},{runtime: 3, memory: 100}' task.runtime='${sweep.runtime}' task.memory='${sweep.memory}' benchmark=all hydra/launcher=joblib -m
 python scripts/sleep_plots.py
