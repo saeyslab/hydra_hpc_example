@@ -70,10 +70,10 @@ if [ ! -z $INSTALL ]; then
 	if [ -d $VENV_PATH ]; then
 		rm -r $VENV_PATH
 	fi
-    python3 -m venv $VENV_PATH
+    python -m venv $VENV_PATH
     source $VENV_PATH/bin/activate
 	if [ ! -z "$PIP_ARGS" ]; then
-        pip install $PIP_ARGS
+        python -m pip install $PIP_ARGS
     fi
 	echo "Virtual environment $VENV_PATH installed."
 	# TODO: add `pip install -e .` for local packages
@@ -108,5 +108,5 @@ if [ ! -z "$SCRIPT" ]; then
 	# 	SCRIPT="bash $SCRIPT"
 	# fi
 	# Run the script (or an absolute script path) with the arguments
-	$SCRIPT
+	$SCRIPT $@
 fi

@@ -19,20 +19,20 @@ def parse_runtime(f: Path) -> tuple[int, float]:
 def parse_memory(f: Path) -> float | None:
     memory_file = f.parent / 'memory.txt'
     with open(memory_file, 'w') as fh:
-        subprocess.run(['python3', '-m', 'memray', 'tree', str(f)], stdout=fh)
+        # TODO dependency on memray
+        subprocess.run(['python3', '-m', 'memray', 'tree', str(f)], stdout=fh, timeout=10)
     tree = memory_file.read_text()
     regex = r"Peak memory size: ([A-Za-z.0-9]+)"     
     match = re.search(regex, tree)
     peak = match.group(1) if match else 0
-    match [peak[:-2], peak[-2:]]:
-        case [n, 'KB']:
-            return float(n) / 1000
-        case [n, 'MB']:
-            return float(n)
-        case [n, 'GB']:
-            return float(n) * 1000
-        case [n, _]:
-            return float(n)
+    if peak.endswith('KB'):
+        return float(peak[:-2]) / 1000
+    elif peak.endswith('MB'):
+        return float(peak[:-2])
+    elif peak.endswith('GB'):
+        return float(peak[:-2]) * 1000
+    else:
+        return float(peak)
 
 def plot_runtime(files: list[Path]) -> list[Any]:
     runtimes = [(get_task(f)['runtime'], parse_runtime(f)) for f in files]

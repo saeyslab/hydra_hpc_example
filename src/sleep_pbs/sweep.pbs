@@ -6,5 +6,5 @@
 ml load parallel
 parallel --version
 
-parallel -j $SLURM_NTASKS folder=src/sleep_pbs script=main.py srun -N 1 -n 1 -c 1 --exact runner.pbs \
+parallel -j $SLURM_NTASKS folder=src/sleep_pbs SCRIPT=main.py srun -N 1 -n 1 -c 1 --exact runner.pbs \
 -r {runtime} -m {memory} ::: *

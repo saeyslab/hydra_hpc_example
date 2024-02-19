@@ -1,2 +1,4 @@
 memray
 pyyaml
+matplotlib
+omegaconf

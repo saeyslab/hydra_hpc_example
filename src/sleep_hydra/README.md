@@ -6,7 +6,7 @@ Because the multirun output folder has a fixed structure, you can parse the fold
 ```bash
 ml swap cluster/donphan
 # launch interactive session
-ACTIVATE=src/sleep_hydra script=bash srun --pty runner.pbs
+ACTIVATE=src/sleep_hydra SCRIPT=bash srun --pty runner.pbs
 # execute Hydra like normal
 python src/sleep_hydra/main.py +sweep='{runtime: 1, memory: 1},{runtime: 2, memory: 10},{runtime: 3, memory: 100}' task.runtime='${sweep.runtime}' task.memory='${sweep.memory}' benchmark=all hydra/launcher=joblib -m
 python scripts/sleep_plots.py
