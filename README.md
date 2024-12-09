@@ -32,6 +32,8 @@ You can always reset this setup using `module purge`.
 - [src/sleep_hydra/README.md](./src/sleep_hydra/README.md) is the same sleep example and benchmarking, but executed with the Hydra framework. More powerful and flexible, but also more complex.
 - [src/dask_jobqueue/README.md](./src/dask_jobqueue/README.md) is an example of how to use Hydra and submitit to launch a Dask jobqueue through the SLURM scheduler. 
 - [src/frequencies_hydra/README.md](./src/frequencies_hydra/README.md) is the counting frequencies example with benchmarking. It uses a Python-only configuration, based on hydra-zen.
+- [src/dask_batchrunner/README.md](./src/dask_batchrunner/README.md) is an example of how to use the SLURMRunner from dask-jobqueue to launch a Dask cluster on SLURM. It uses either Pixi or vsc-venv to manage the environment. It currently does not use MPI.
+- [src/dask_mympi/README.md](./src/dask_mympi/README.md) is an example of how to use the vsc-mympirun to launch a Dask cluster on SLURM. It uses  vsc-venv to manage the environment.
 
 ## Common patterns
 
