@@ -1,0 +1,14 @@
+[project]
+authors = ["Benjamin Rombaut <benjamin.rombaut@gmail.com>"]
+channels = ["conda-forge"]
+description = "Add a short description here"
+name = "dask_batchrunner"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+python = ">3.12,<3.13"
+dask-jobqueue = ">=0.9.0,<0.10"
+dask = ">=2024.12.0,<2025"
