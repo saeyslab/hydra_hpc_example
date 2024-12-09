@@ -2,8 +2,15 @@ outputs/
 multirun/
 outputs_complex/
 __pycache__/
+**/venvs/*
+**.err
+**.out
+**/scheduler*.json
+**output/
 
 # ignore python and egg files
 *.pyc
 *.pyo
-*.egg-info/
+*.egg-info/# pixi environments
+.pixi
+*.egg-info
